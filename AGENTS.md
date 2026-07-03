@@ -167,13 +167,17 @@ Prisma models (full schema in docs/SRS.MD §3):
 - **Zod** — runtime schema validation for env vars, API inputs, and any external/untyped data.
 - **ESLint** — linting and code quality rules.
 - **Prettier** — consistent formatting.
+- **eslint-config-prettier** — turns off ESLint format rules that conflict with Prettier.
 - **Knip** — detects unused files, exports, and dependencies.
 - **Husky** — git hooks (pre-commit, pre-push).
+- **lint-staged** — runs ESLint + Prettier on staged files only, inside the pre-commit hook.
 - **Commitlint** — enforces Conventional Commits.
 - **Gitleaks** — scans for leaked secrets/credentials.
-- **Vitest** — unit and integration testing.
+- **Vitest** (+ **@vitest/coverage-v8**) — unit and integration testing, with coverage for the ≥80% gate.
 - **GitHub Actions** — CI: lint, format check, tests, gitleaks on every PR.
 - **Dependabot** — automated dependency updates and vulnerability alerts.
+- **EditorConfig** — consistent indentation and line endings across editors.
+- **Environment pinning** — `.nvmrc` (Node 22), `packageManager` (pnpm), `.npmrc` (`engine-strict`, `save-exact`) so every machine builds identically.
 
 Conventions:
 - All commits follow Conventional Commits, format `feat(scope): description AB#ticket`.

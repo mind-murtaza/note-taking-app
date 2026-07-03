@@ -178,6 +178,7 @@ and per-note version history with restore.
 
 | Feature | FRS Sections | Tickets |
 | --- | --- | --- |
+| Project Setup & Tooling | — (infrastructure; see SDS §10) | AB-1001 |
 | Auth | FRS 1.1–1.6 | AB-1002, AB-1003, AB-1010 |
 | Notes CRUD | FRS 2.1–2.5 | AB-1004, AB-1005, AB-1011, AB-1012 |
 | Tags | FRS 3 | AB-1006 |
@@ -185,3 +186,5 @@ and per-note version history with restore.
 | Sharing | FRS 5 | AB-1008, AB-1014 |
 | Versions | FRS 6 | AB-1009, AB-1015 |
 | E2E | All | AB-1016 |
+
+> AB-1001 (project scaffolding & tooling) has no functional requirement — it establishes the monorepo, tooling, and CI baseline that every other ticket depends on. Its full specification lives in SDS §10.

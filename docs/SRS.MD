@@ -303,3 +303,52 @@ Implementation: `websearch_to_tsquery('english', q)` against `searchVector`, ran
 | ADR-003 | `contentText` extracted from TipTap JSON at write time | FTS can't parse JSON structure; extraction in shared lib keeps it testable |
 | ADR-004 | Version purge inside the update transaction | Guarantees ≤50 versions invariant with no background job |
 | ADR-005 | Ownership violations return 404, never 403 | FRS 1.6.2 — prevents resource-existence enumeration |
+| ADR-006 | Dependency versions are chosen at implementation time and pinned exact, gated by `pnpm audit` (0 high/critical); one scaffolding ticket (AB-1001) establishes the tooling baseline | Prevents stale or vulnerable version pins baked into the spec; gives every later ticket one enforced, audited foundation |
+
+---
+
+## 10. Project Scaffolding & Tooling (AB-1001)
+
+Foundational ticket: stands up the pnpm monorepo skeleton and all quality tooling so that `pnpm build → lint → test` run green on an empty tree, and every later ticket (AB-1002+) builds on a working, enforced baseline. No domain logic here — this builds the workshop, not the products.
+
+### 10.1 Deliverables
+
+- **Workspace skeleton** — root `package.json` (private) + `pnpm-workspace.yaml`; the four packages (`packages/shared`, `backend`, `frontend`, `e2e`), each with its own `package.json` + `tsconfig.json` and a placeholder entry so builds pass.
+- **TypeScript** — root `tsconfig.base.json` (strict mode); each package extends it; `backend`/`frontend` resolve `@app/shared` via the workspace protocol.
+- **Zod** — installed in `packages/shared`; an env-validation module that validates `process.env` (the pattern reused for all later config).
+- **ESLint (flat config) + Prettier** — TypeScript + React rules; `eslint-config-prettier` disables format rules that would conflict with Prettier.
+- **Knip / Husky / Commitlint / Gitleaks** — unused-code detection; git hooks; Conventional-Commit enforcement; secret scanning.
+- **lint-staged** — pre-commit hook runs ESLint + Prettier on staged files only.
+- **Vitest + @vitest/coverage-v8** — root + per-package config; one trivial passing test per package; coverage reporting wired for the ≥80% gate (§7).
+- **Prisma (bare init)** — installed; `schema.prisma` with datasource + generator blocks only (no models — models are defined in their owning tickets). `prisma generate` works from day one.
+- **Local Postgres** — `docker-compose.yml` providing Postgres 16 with a dev database and a separate test database (per §7).
+- **Environment pinning** — `.editorconfig`, `.nvmrc` (Node 22), `packageManager` (pnpm), `.npmrc` (`engine-strict=true`, `save-exact=true`).
+- **GitHub Actions** — CI on every PR: install → build → lint → format:check → test → gitleaks.
+- **Dependabot** — `.github/dependabot.yml` for the `npm` and `github-actions` ecosystems.
+
+### 10.2 Acceptance Criteria (Definition of Done)
+
+| # | Criterion |
+| --- | --- |
+| AC1 | `pnpm install` succeeds; every dependency pinned to an exact version (no `^`/`~`/`@latest`); `save-exact=true` enforced. |
+| AC2 | `pnpm build` → 0 errors, 0 warnings across all packages. |
+| AC3 | `pnpm lint --max-warnings 0` → clean. |
+| AC4 | `pnpm format:check` → clean. |
+| AC5 | `pnpm test` → green; coverage reporting produces output. |
+| AC6 | `pnpm knip` → no unused files, exports, or dependencies. |
+| AC7 | Husky: a non-Conventional commit message is rejected (commitlint); a planted secret is blocked (gitleaks); staged files are linted (lint-staged). |
+| AC8 | `pnpm audit --audit-level=high` → 0 high/critical vulnerabilities. |
+| AC9 | `@app/shared` is importable from both `backend` and `frontend` (verified by a placeholder import). |
+| AC10 | Strict TypeScript proven: a deliberate type error fails `pnpm build`. |
+| AC11 | `docker compose up` starts Postgres 16 with dev + test databases reachable via `DATABASE_URL`. |
+| AC12 | `prisma generate` succeeds against the bare schema. |
+| AC13 | GitHub Actions workflow runs install → build → lint → format → test → gitleaks on a PR and passes. |
+| AC14 | Dependabot config present for `npm` + `github-actions`. |
+
+### 10.3 Version & Vulnerability Policy
+
+Exact versions are **not** fixed in this document; they are selected at implementation time and pinned exactly in each `package.json`. `pnpm audit --audit-level=high` must report zero high/critical advisories at implementation (AC8) — this is verified, not assumed. Rationale in ADR-006.
+
+### 10.4 Out of Scope
+
+No domain logic (auth, notes, tags, search, share, version) and no Prisma models — those belong to AB-1002 and later. No deployment/CD and no application Dockerfiles; the docker-compose file is for local Postgres only.
