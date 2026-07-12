@@ -1,0 +1,26 @@
+# Local PostgreSQL 16 for development. One server, two databases: `notes_dev`
+# (created by POSTGRES_DB) and `notes_test` (created by the init script) so
+# integration tests run against a separate DB (SDS §7). Local infra only — no
+# app services, no deployment (SDS §10.4).
+services:
+  postgres:
+    image: postgres:16
+    container_name: notes-postgres
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: notes_dev
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/initdb:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U app -d notes_dev']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

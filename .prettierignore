@@ -1,0 +1,11 @@
+dist
+coverage
+pnpm-lock.yaml
+**/generated
+
+# Prettier governs source code (ts/tsx/js/json/yaml), not prose docs or vendored
+# tooling. Markdown (FRS/SRS/AGENTS/CLAUDE, openspec artifacts) and the .claude/
+# command+skill files are authored/maintained outside the formatted source set.
+.claude/
+**/*.md
+**/*.MD
