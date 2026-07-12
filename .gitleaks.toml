@@ -1,0 +1,16 @@
+# Gitleaks config for the note-taking app. Extends the built-in ruleset so the
+# default secret detectors (API keys, tokens, private keys, etc.) apply, and
+# adds a project allowlist for known-safe placeholder values.
+title = "note-taking-app gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allow example/placeholder values that are not real secrets"
+regexes = [
+  '''postgresql://app:app@localhost:5432/notes_(dev|test)''',
+]
+paths = [
+  '''\.env\.example$''',
+]

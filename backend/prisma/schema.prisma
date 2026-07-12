@@ -1,0 +1,12 @@
+// Bare Prisma setup (AB-1001, SDS §10.1 / ADR-006).
+// Datasource + generator only — NO models. Models are defined in their owning
+// tickets (AB-1002+). `prisma generate` must succeed against this bare schema.
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}

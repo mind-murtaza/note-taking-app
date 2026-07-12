@@ -1,0 +1,10 @@
+pnpm lint-staged
+
+# Secret scan on staged changes. gitleaks is a Go binary (not an npm dep); if a
+# contributor hasn't installed it, warn but don't block — CI runs the
+# authoritative scan. Install locally: brew install gitleaks
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks git --staged --redact
+else
+  echo "[pre-commit] gitleaks not installed — skipping local secret scan (CI enforces it). Install: brew install gitleaks"
+fi
