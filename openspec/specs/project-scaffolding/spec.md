@@ -1,7 +1,7 @@
 # project-scaffolding Specification
 
 ## Purpose
-TBD - created by archiving change ab-1001-project-scaffolding. Update Purpose after archive.
+Establishes the pnpm monorepo skeleton and enforced quality toolchain (strict TypeScript, ESLint/Prettier, Vitest coverage, Knip, Husky hooks, bare Prisma, local Postgres, CI, Dependabot) that every functional ticket (AB-1002+) builds on. Encodes AB-1001 acceptance criteria AC1–AC14 (SDS §10.2) as verifiable requirements. No domain logic or Prisma models.
 ## Requirements
 ### Requirement: Pinned, reproducible dependency installation
 The workspace SHALL install cleanly with every dependency pinned to an exact version. No `^`, `~`, or `@latest` ranges are permitted anywhere in any `package.json`, and `save-exact=true` MUST be enforced via `.npmrc` so future installs stay pinned. Installed dependencies MUST report zero high or critical advisories.
