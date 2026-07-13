@@ -1,1 +1,23 @@
+# Enforce human-authored commits (AGENTS.md §13): reject any AI/model/vendor
+# attribution in the commit message — no co-author trailers, assistant/model
+# names, or vendor email/domain. Comment lines (#) are ignored. The "CLAUDE.md"
+# filename is allowed; the bare assistant name is not.
+body="$(grep -v '^#' "$1")"
+fail=0
+
+# Tokens with no legitimate use in a commit message.
+if printf '%s\n' "$body" | grep -iEq 'co-authored-by:|generated with|anthropic|\b(opus|sonnet|haiku|fable)\b'; then
+  fail=1
+fi
+# Block the assistant name unless it is the CLAUDE.md filename.
+if printf '%s\n' "$body" | grep -oiE 'claude[a-z0-9._-]*' | grep -ivqE '^claude\.md$'; then
+  fail=1
+fi
+
+if [ "$fail" = "1" ]; then
+  echo "[commit-msg] Blocked: remove AI/model attribution from the commit message."
+  echo "[commit-msg] No co-author trailer, assistant/model/vendor name, or vendor email — commits are human-authored. (The CLAUDE.md filename is fine.)"
+  exit 1
+fi
+
 pnpm commitlint --edit "$1"
