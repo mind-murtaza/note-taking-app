@@ -185,3 +185,4 @@ Conventions:
 - Code must pass ESLint, Prettier, and TypeScript checks before commit (enforced via Husky).
 - Tests must pass before merge.
 - No secrets or credentials committed — env vars go through `.env` (never committed): `DATABASE_URL`, `JWT_SECRET`, `ACCESS_TOKEN_TTL`, `REFRESH_TOKEN_TTL`, `PORT`.
+- **Documentation is part of Definition of Done.** READMEs follow a hub (root) + per-package model — every fact lives in one place. At ticket close, reconcile the affected README(s) with what the ticket changed: new dependencies, features, modules/files, endpoints, commands, or env vars, plus the package README's `Status` block. The `.husky/pre-push` hook warns (non-blocking) when a push contains code changes but no README change. Rationale: [docs/superpowers/specs/2026-07-13-readme-structure-design.md](docs/superpowers/specs/2026-07-13-readme-structure-design.md).

@@ -1,0 +1,40 @@
+# README Definition-of-Done reminder (AB-1017).
+# Warns when a push contains code changes but no README update. It NEVER blocks
+# the push (always exits 0) — CI and the DoD in AGENTS.md §13 are authoritative;
+# this is just a nudge, matching the non-blocking gitleaks precedent in pre-commit.
+
+code_re='^(backend|frontend|packages/shared|e2e)/(src|prisma)/'
+readme_re='(^|/)README\.md$'
+warn=0
+
+while read -r _local_ref local_sha _remote_ref remote_sha; do
+  # Skip branch deletions (local sha all zeros).
+  case "$local_sha" in *[!0]*) : ;; *) continue ;; esac
+
+  # Determine the commit range being pushed.
+  case "$remote_sha" in
+    *[!0]*) range="$remote_sha..$local_sha" ;;                 # existing remote branch
+    *)                                                          # new branch on remote
+      base="$(git merge-base "$local_sha" origin/dev 2>/dev/null)"
+      [ -z "$base" ] && continue
+      range="$base..$local_sha"
+      ;;
+  esac
+
+  changed="$(git diff --name-only "$range" 2>/dev/null)"
+  [ -z "$changed" ] && continue
+
+  if printf '%s\n' "$changed" | grep -qE "$code_re" && \
+     ! printf '%s\n' "$changed" | grep -qE "$readme_re"; then
+    warn=1
+  fi
+done
+
+if [ "$warn" = "1" ]; then
+  printf '\n\033[33m⚠  [pre-push] README DoD (AB-1017): code changed but no README updated.\033[0m\n'
+  printf '   Reconcile the affected README(s) + Status block with what this change adds\n'
+  printf '   (deps, features, modules, endpoints, commands, env vars) before opening a PR.\n'
+  printf '   Reminder only — the push continues.\n\n'
+fi
+
+exit 0
