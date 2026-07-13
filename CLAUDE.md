@@ -45,6 +45,10 @@ Conventional Commits per AGENTS.md §13: `feat(scope): description AB#ticket` (a
 
 Run all three before every commit and before declaring any task done. On a red step, fix it before moving to the next gate — don't push a failure downstream.
 
+## Documentation (README DoD)
+
+READMEs use a hub (root) + per-package model — root holds cross-cutting content, each package README owns its own deep detail, every fact in one place. Updating docs is part of finishing a ticket: before the final commit/PR, reconcile the affected README(s) with what the ticket actually changed — new dependencies, features, modules/files, endpoints, commands, or env vars — and update the package README's `Status` block. The `.husky/pre-push` hook prints a non-blocking reminder when a push has code changes but no README change. See AGENTS.md §13 and [docs/superpowers/specs/2026-07-13-readme-structure-design.md](docs/superpowers/specs/2026-07-13-readme-structure-design.md).
+
 ## Commands Requiring [y/n] Permission
 
 - `git push*`, `gh pr create` / `gh pr merge`
