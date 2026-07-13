@@ -22,5 +22,5 @@ Both `backend` and `frontend` depend on this package and import from it directly
 1. **New domain schema:** add `src/schemas/<domain>.ts`, define the Zod schema(s) (e.g. `createNoteSchema`, `updateNoteSchema`), and export them.
 2. **New type:** in `src/types/<domain>.ts`, derive it with `z.infer<typeof someSchema>` rather than hand-writing an interface that can drift from the schema.
 3. **New constant:** add it to the relevant file in `src/constants/` (or create one for a new domain) — never inline a magic number/string in `backend` or `frontend`.
-4. Export the new schema/type/constant from the package's entry point (`src/index.ts`) so consumers import from `@repo/shared`, not a deep path.
+4. Export the new schema/type/constant from the package's entry point (`src/index.ts`) so consumers import from `@app/shared`, not a deep path.
 5. Run `pnpm --filter shared build && pnpm --filter shared test` before using the new export elsewhere, and update both `backend` and `frontend` call sites in the same change if the shape affects an existing endpoint.

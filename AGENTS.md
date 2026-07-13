@@ -181,6 +181,7 @@ Prisma models (full schema in docs/SRS.MD §3):
 
 Conventions:
 - All commits follow Conventional Commits, format `feat(scope): description AB#ticket`.
+- **Commits are human-authored — no AI/model attribution anywhere.** A commit message MUST NOT contain a co-author trailer, an AI-assistant / model / vendor name, a vendor email, or a "Generated with …" footer. The same applies to PR bodies, READMEs, and every file in the repo — nothing here carries AI attribution. Enforced by the `.husky/commit-msg` hook.
 - Branches: `feature/{domain}/AB-{ticket}-{short-name}`.
 - Code must pass ESLint, Prettier, and TypeScript checks before commit (enforced via Husky).
 - Tests must pass before merge.

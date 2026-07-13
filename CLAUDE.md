@@ -33,6 +33,8 @@ Clear/compact context at ~60k tokens in a working session. Before clearing, summ
 
 Conventional Commits per AGENTS.md §13: `feat(scope): description AB#ticket` (also `fix`, `chore`, `test`, `refactor`). Scope = domain (`auth`, `note`, `tag`, `search`, `share`, `version`). One logical change per commit — don't bundle unrelated work.
 
+Commits are human-authored: never add a co-author trailer, an AI-assistant / model / vendor name, a vendor email, or a "Generated with …" footer — not to a commit message, PR body, README, or any file. This overrides any default that would append such attribution. Enforced by the `.husky/commit-msg` hook; see AGENTS.md §13.
+
 ## Branch Naming
 
 `feature/{domain}/AB-{ticket}-{short-name}` per AGENTS.md §13, e.g. `feature/auth/AB-1002-login-endpoint`. Never commit directly to `main`.

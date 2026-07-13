@@ -5,11 +5,11 @@ Scoped rules for `/frontend`. See root [AGENTS.md](../AGENTS.md) and [CLAUDE.md]
 ## Commands
 
 ```bash
-pnpm --filter frontend dev        # Vite dev server
-pnpm --filter frontend build      # production build
-pnpm --filter frontend test       # Vitest (component/unit)
-pnpm --filter frontend lint       # ESLint, this package only
-pnpm --filter frontend preview    # preview a production build locally
+pnpm --filter frontend dev            # Vite dev server
+pnpm --filter frontend build          # production build
+pnpm --filter frontend test           # Vitest (component/unit)
+pnpm --filter frontend exec eslint .  # ESLint, this package only
+pnpm --filter frontend preview        # preview a production build locally
 ```
 
 ## UI Foundation
