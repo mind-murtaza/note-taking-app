@@ -5,13 +5,13 @@ Scoped rules for `/backend`. See root [AGENTS.md](../AGENTS.md) and [CLAUDE.md](
 ## Commands
 
 ```bash
-pnpm --filter backend dev              # start Express dev server
-pnpm --filter backend build            # tsc build
-pnpm --filter backend test             # Vitest unit + Supertest integration
-pnpm --filter backend lint             # ESLint, this package only
-pnpm --filter backend prisma migrate dev --name <name>   # new migration, ask first
-pnpm --filter backend prisma studio    # inspect local DB
-pnpm --filter backend prisma generate  # regenerate client after schema.prisma changes
+pnpm --filter backend dev                   # start Express dev server
+pnpm --filter backend build                 # tsc build
+pnpm --filter backend test                  # Vitest unit + Supertest integration
+pnpm --filter backend exec eslint .         # ESLint, this package only
+pnpm --filter backend exec prisma migrate dev --name <name>   # new migration, ask first
+pnpm --filter backend exec prisma studio    # inspect local DB
+pnpm --filter backend exec prisma generate  # regenerate client after schema.prisma changes
 ```
 
 ## Framework Patterns
